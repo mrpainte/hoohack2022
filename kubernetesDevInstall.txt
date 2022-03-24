@@ -1,0 +1,33 @@
+#######################
+#      VM SET UP      #
+#######################
+#install Microk8s
+   sudo snap install microk8s --classic --channel=1.21/stable
+   microk8s status
+   sudo usermod -a -G microk8s ${USER}
+   sudo chown -f -R ${USER} ~/.kube
+   newgrp microk8s
+#install lens  
+   sudo apt update
+   sudo snap install kontena-lens --classic
+   microk8s config view
+   microk8s config view > ~/.kube/config
+#install code
+   sudo snap install code --classic
+#install podman and buildah
+   sudo apt install curl
+   . /etc/os-release
+   echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+   curl -L "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key" | sudo apt-key add -
+   sudo apt update
+   sudo apt -y install podman
+   sudo apt -y install buildah
+   podman --help
+
+#configure microk8s
+   microk8s status
+   microk8s enable dns prometheus registry
+   ifconfig 
+# obtain your ens IP address of your VM. in the case of 192.168.64.129 we will run the next command as the following:
+   microk8s enable metallb 192.168.64.130-192.168.64.150
+
