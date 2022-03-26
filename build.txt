@@ -1,0 +1,18 @@
+#initial set up for registry
+echo '[[ registry ]]
+location = "localhost:32000"
+insecure = true' | sudo tee /etc/containers/registries.conf.d/microk8s.conf
+
+######################################################3
+#Set the tag of the build for localhost registry
+buildah bud --tag localhost:32000/code .
+
+#test the image that exists under the tag
+podman run --rm --publish externalPort:internalPort localhost:32000/code 
+
+#publish the image to the microk8s registry
+podman push localhost:32000/code
+
+
+
+
