@@ -1,0 +1,69 @@
+---
+# Source: server/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: server
+  labels:
+    app.kubernetes.io/name: server
+    helm.sh/chart: server-0.1.0
+    app.kubernetes.io/instance: server
+    app.kubernetes.io/version: "1.0"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: server/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: server
+  labels:
+    app.kubernetes.io/name: server
+    helm.sh/chart: server-0.1.0
+    app.kubernetes.io/instance: server
+    app.kubernetes.io/version: "1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: server
+    app.kubernetes.io/instance: server
+---
+# Source: server/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+  labels:
+    app.kubernetes.io/name: server
+    helm.sh/chart: server-0.1.0
+    app.kubernetes.io/instance: server
+    app.kubernetes.io/version: "1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: server
+      app.kubernetes.io/instance: server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: server
+        app.kubernetes.io/instance: server
+    spec:
+      serviceAccountName: server
+      securityContext:
+        {}
+      containers:
+        - name: server
+          securityContext:
+            {}
+          image: "localhost:32000/server"
+          imagePullPolicy: Always
+          resources:
+            {}

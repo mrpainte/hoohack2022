@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-python
+  labels:
+    app: server-python
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server-python
+  template:
+    metadata:
+      labels:
+        app: server-python
+    spec:
+      containers:
+      - name: server-python
+        image: localhost:32000/server
+        imagePullPolicy: Always
+        ports:
+            - name: http-tcp
+              containerPort: 8080
+              protocol: TCP
+            - name: http-udp
+              containerPort: 8080
+              protocol: UDP
