@@ -7,11 +7,8 @@ spec:
     - port: 80
       protocol: TCP
       name: http
-      targetPort: http-tcp
-    - port: 80
-      protocol: UDP
-      name: http-udp
-      targetPort: http-udp
+      targetPort: 8080
+    
   selector:
     app: server-python
   sessionAffinity: None
